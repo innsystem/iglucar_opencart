@@ -1,0 +1,31 @@
+.htaccess
+/config.php
+admin/config.php
+
+!index.html
+
+download/
+
+image/catalog/*
+image/data/
+image/cache/
+system/cache/
+system/logs/
+system/vendor/
+
+#system/storage/
+system/storage/cache/*
+system/storage/download/*
+system/storage/logs/*
+system/storage/modification/*
+system/storage/session/*
+system/storage/upload/*
+system/storage/logs/*
+
+
+# vQmod log files
+vqmod/logs/*
+# vQmod cache files
+vqmod/vqcache/*
+vqmod/checked.cache
+vqmod/mods.cache
