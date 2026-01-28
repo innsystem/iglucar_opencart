@@ -1,0 +1,49 @@
+{{ header }}
+<div id="information-manual" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      
+      <div class="manual-container">
+       {% if has_manual %}
+       <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <h1 class="mb-0">{{ heading_title }}</h1>
+        <a href="{{ download_url }}" class="btn btn-primary btn-download">
+          <i class="fa fa-download"></i> {{ text_download }}
+        </a>
+       </div>
+
+        <hr>
+        
+        <div class="manual-pdf-viewer">
+          <iframe src="{{ manual_pdf_url }}" width="100%" height="800px" frameborder="0">
+            <p>Seu navegador não suporta iframes. <a href="{{ download_url }}">Clique aqui para baixar o manual</a></p>
+          </iframe>
+        </div>
+        {% else %}
+        <div class="text-center">
+          <h1>{{ heading_title }}</h1>
+          <hr>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i>
+            <p class="mb-0">{{ text_no_manual }}</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

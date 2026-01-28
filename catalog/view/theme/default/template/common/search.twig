@@ -1,0 +1,273 @@
+<div id="search" class="input-group">
+  <input type="text" name="search" value="{{ search }}" placeholder="{{ text_search }}" class="form-control input-lg" id="main-search-input" />
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-default btn-lg" id="main-search-btn"><i class="fa fa-search"></i></button>
+  </span>
+</div>
+<div id="main-search-results" class="main-search-results"></div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var searchMaxResults = 30;
+    var searchTimeout;
+    
+    // Selecionar todo o texto quando o campo recebe foco (facilita nova busca)
+    $('#main-search-input').on('focus', function() {
+        // Selecionar texto apenas se houver conteúdo
+        if ($(this).val().length > 0) {
+            $(this).select();
+        }
+    });
+    
+    // Autocomplete para busca principal
+    $('#main-search-input').on('input', function() {
+        var query = $(this).val();
+        
+        clearTimeout(searchTimeout);
+        
+        if (query.length >= 2) {
+            searchTimeout = setTimeout(function() {
+                $.ajax({
+                    url: 'index.php?route=extension/module/vehicle_search/autocomplete',
+                    type: 'get',
+                    data: 'filter_name=' + encodeURIComponent(query) + '&max_results=' + searchMaxResults,
+                    dataType: 'json',
+                    success: function(json) {
+                        var html = '';
+                        
+                        if (json.length > 0) {
+                            html = '<ul class="dropdown-menu" style="display: block; position: absolute; width: 100%; z-index: 1000;">';
+                            for (var i = 0; i < json.length; i++) {
+                                html += '<li><a href="#" class="vehicle-suggestion" data-value="' + json[i].value + '">' + json[i].name + '</a></li>';
+                            }
+                            html += '</ul>';
+                        } else {
+                            // Mensagem quando não há resultados
+                            var whatsappNumber = '{{ whatsapp_number }}';
+                            var whatsappMessage = encodeURIComponent('Olá! Não encontrei meu veículo na busca. Podem me ajudar?');
+                            var whatsappUrl = 'https://wa.me/+55' + whatsappNumber + '?text=' + whatsappMessage;
+                            
+                            html = '<div class="search-no-results">';
+                            html += '<div class="no-results-content">';
+                            html += '<div class="no-results-icon">';
+                            html += '<i class="fa fa-search"></i>';
+                            html += '</div>';
+                            html += '<div class="no-results-message">';
+                            html += '<p class="no-results-subtitle">Caso não encontre seu veículo na pesquisa, fale com um de nossos consultores.</p>';
+                            html += '</div>';
+                            html += '<div class="no-results-action">';
+                            html += '<a href="' + whatsappUrl + '" target="_blank" class="whatsapp-link-btn">';
+                            html += '<i class="fa fa-whatsapp"></i> Clique aqui';
+                            html += '</a>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                        }
+                        
+                        $('#main-search-results').html(html);
+                    },
+                    error: function() {
+                        $('#main-search-results').html('');
+                    }
+                });
+            }, 300);
+        } else {
+            $('#main-search-results').html('');
+        }
+    });
+    
+    // Função para redirecionar para busca
+    function searchByVehicle(vehicleName) {
+        // Primeiro, verificar se é um modelo de veículo conhecido
+        $.ajax({
+            url: 'index.php?route=extension/module/vehicle_search/autocomplete',
+            type: 'get',
+            data: 'filter_name=' + encodeURIComponent(vehicleName) + '&max_results=1',
+            dataType: 'json',
+            success: function(json) {
+                var isVehicleModel = false;
+                for (var i = 0; i < json.length; i++) {
+                    if (json[i].name.toLowerCase() === vehicleName.toLowerCase()) {
+                        isVehicleModel = true;
+                        break;
+                    }
+                }
+                
+                if (isVehicleModel) {
+                    // É um modelo de veículo, usar busca por filtro
+                    var url = 'index.php?route=product/search&search=' + encodeURIComponent(vehicleName) + '&filter=' + encodeURIComponent(vehicleName);
+                } else {
+                    // Busca normal
+                    var url = 'index.php?route=product/search&search=' + encodeURIComponent(vehicleName);
+                }
+                
+                window.location.href = url;
+            },
+            error: function() {
+                // Em caso de erro, fazer busca normal
+                var url = 'index.php?route=product/search&search=' + encodeURIComponent(vehicleName);
+                window.location.href = url;
+            }
+        });
+    }
+    
+    // Selecionar sugestão (apenas para sugestões do header)
+    $(document).on('click', '#main-search-results .vehicle-suggestion', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var value = $(this).data('value');
+        $('#main-search-input').val(value);
+        $('#main-search-results').html('');
+        searchByVehicle(value);
+        return false;
+    });
+    
+    // Buscar ao clicar no botão
+    $('#main-search-btn').on('click', function() {
+        var query = $('#main-search-input').val();
+        if (query) {
+            searchByVehicle(query);
+        }
+    });
+    
+    // Buscar ao pressionar Enter
+    $('#main-search-input').on('keypress', function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            var query = $(this).val();
+            if (query) {
+                searchByVehicle(query);
+            }
+        }
+    });
+    
+    // Fechar dropdown ao clicar fora
+    $(document).on('click', function(e) {
+        // Não fechar se o clique foi dentro do campo de busca ou em uma sugestão
+        if (!$(e.target).closest('#search').length && !$(e.target).closest('#main-search-results').length) {
+            $('#main-search-results').html('');
+        }
+    });
+});
+</script>
+
+<style>
+.main-search-results {
+    position: relative;
+}
+
+.main-search-results .dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.main-search-results .dropdown-menu li a {
+    padding: 8px 12px;
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.main-search-results .dropdown-menu li a:hover {
+    background: var(--bs-color-blue-1);
+    color: #FFF;
+}
+
+/* Estilos para mensagem de "sem resultados" */
+.search-no-results {
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    margin-top: 5px;
+}
+
+.no-results-content {
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.no-results-icon {
+    margin-bottom: 15px;
+}
+
+.no-results-icon i {
+    font-size: 48px;
+    color: #ff9800;
+    opacity: 0.8;
+}
+
+.no-results-message {
+    margin-bottom: 20px;
+}
+
+.no-results-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+.no-results-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.no-results-action {
+    margin-top: 20px;
+}
+
+.whatsapp-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: #fff !important;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-link-btn:hover {
+    background: linear-gradient(135deg, #128C7E 0%, #25D366 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.whatsapp-link-btn:active {
+    transform: translateY(0);
+}
+
+.whatsapp-link-btn i {
+    font-size: 18px;
+}
+
+/* Animação suave */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-no-results {
+    animation: fadeIn 0.3s ease;
+}
+</style>

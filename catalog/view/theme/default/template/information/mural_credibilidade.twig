@@ -1,0 +1,57 @@
+{{ header }}
+<div id="information-mural-credibilidade" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <div class="mural-container">
+        <h1>{{ heading_title }}</h1>
+        <p class="mural-description">Confira nossa galeria de credibilidade e confiança</p>
+        
+        {% if mural_images %}
+        <div class="mural-gallery">
+          <div class="row">
+            {% for mural_image in mural_images %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="mural-item">
+                <a href="{{ mural_image.image }}" data-lightbox="mural-gallery" data-title="{{ mural_image.title }}" class="mural-image-link">
+                  <div class="mural-image-container">
+                    <img src="{{ mural_image.thumb }}" alt="{{ mural_image.title }}" class="mural-image" />
+                    <div class="mural-overlay">
+                      <i class="fa fa-search-plus"></i>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <div class="text-center">
+          <p>Nenhuma imagem disponível no momento.</p>
+        </div>
+        {% endif %}
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+<!-- Lightbox CSS e JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+{{ footer }}

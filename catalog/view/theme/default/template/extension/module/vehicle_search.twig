@@ -1,0 +1,310 @@
+<div class="vehicle-search-widget" id="vehicle-search-{{ module_id }}">
+  <div class="vehicle-search-banner">
+    <div class="vehicle-search-content">
+      <div class="vehicle-search-title">
+        <h3>{{ heading_title }}</h3>
+      </div>
+      <div class="vehicle-search-form">
+        <div class="input-group">
+          <input type="text" id="vehicle-search-input-{{ module_id }}" class="form-control" placeholder="{{ placeholder }}" />
+        </div>
+        <div id="vehicle-search-results-{{ module_id }}" class="vehicle-search-results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var searchTimeout;
+    var moduleId = '{{ module_id }}';
+    var minLength = {{ min_length }};
+    var maxResults = {{ max_results }};
+
+    // Autocomplete para busca por veículo
+    $('#vehicle-search-input-' + moduleId).on('input', function() {
+        var query = $(this).val();
+        clearTimeout(searchTimeout);
+
+        if (query.length >= minLength) {
+            searchTimeout = setTimeout(function() {
+                $.ajax({
+                    url: 'index.php?route=extension/module/vehicle_search/autocomplete',
+                    type: 'get',
+                    data: 'filter_name=' + encodeURIComponent(query) + '&max_results=' + maxResults,
+                    dataType: 'json',
+                    success: function(json) {
+                        var html = '';
+                        if (json.length > 0) {
+                            html = '<ul class="dropdown-menu" style="display: block; position: absolute; width: 100%; z-index: 1000;">';
+                            for (var i = 0; i < json.length; i++) {
+                                html += '<li><a href="#" class="vehicle-suggestion" data-value="' + json[i].value + '">' + json[i].name + '</a></li>';
+                            }
+                            html += '</ul>';
+                        }
+                        $('#vehicle-search-results-' + moduleId).html(html);
+                    }
+                });
+            }, 300);
+        } else {
+            $('#vehicle-search-results-' + moduleId).html('');
+        }
+    });
+
+    // Selecionar sugestão
+    $(document).on('click', '.vehicle-suggestion', function(e) {
+        e.preventDefault();
+        var value = $(this).data('value');
+        $('#vehicle-search-input-' + moduleId).val(value);
+        $('#vehicle-search-results-' + moduleId).html('');
+        searchByVehicle(value);
+    });
+
+    // Buscar ao clicar no botão
+    $('#vehicle-search-btn-' + moduleId).on('click', function() {
+        var query = $('#vehicle-search-input-' + moduleId).val();
+        if (query) {
+            searchByVehicle(query);
+        }
+    });
+
+    // Buscar ao pressionar Enter
+    $('#vehicle-search-input-' + moduleId).on('keypress', function(e) {
+        if (e.which == 13) {
+            var query = $(this).val();
+            if (query) {
+                searchByVehicle(query);
+            }
+        }
+    });
+
+    function searchByVehicle(vehicleName) {
+        // Primeiro, verificar se é um modelo de veículo conhecido
+        $.ajax({
+            url: 'index.php?route=extension/module/vehicle_search/autocomplete',
+            type: 'get',
+            data: 'filter_name=' + encodeURIComponent(vehicleName) + '&max_results=1',
+            dataType: 'json',
+            success: function(json) {
+                var isVehicleModel = false;
+                for (var i = 0; i < json.length; i++) {
+                    if (json[i].name.toLowerCase() === vehicleName.toLowerCase()) {
+                        isVehicleModel = true;
+                        break;
+                    }
+                }
+
+                if (isVehicleModel) {
+                    // É um modelo de veículo, usar busca por filtro
+                    var url = 'index.php?route=product/search&search=' + encodeURIComponent(vehicleName) + '&filter=' + encodeURIComponent(vehicleName);
+                } else {
+                    // Busca normal
+                    var url = 'index.php?route=product/search&search=' + encodeURIComponent(vehicleName);
+                }
+
+                window.location.href = url;
+            }
+        });
+    }
+
+    // Fechar dropdown ao clicar fora
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#vehicle-search-' + moduleId).length) {
+            $('#vehicle-search-results-' + moduleId).html('');
+        }
+    });
+});
+</script>
+
+<style>
+.vehicle-search-widget {
+    margin-bottom: 30px;
+}
+
+.vehicle-search-banner {
+    background: var(--bs-color-yellow);
+    border-radius: 15px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#column-left .vehicle-search-banner{
+    padding: 10px;
+}
+
+.vehicle-search-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+#column-left .vehicle-search-content{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.vehicle-search-title h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Play', sans-serif;
+    text-shadow: none;
+    background: none;
+    padding: 0;
+}
+#column-left .vehicle-search-title h3{
+    font-size: 17px;
+}
+
+.vehicle-search-form {
+    flex: 1;
+    max-width: 500px;
+}
+
+#column-left .vehicle-search-form {
+    width: 100%;
+}
+
+.vehicle-search-form .input-group {
+    display: flex;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.vehicle-search-form .form-control {
+    border: none;
+    padding: 25px 20px;
+    font-size: 16px !important;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#column-left .vehicle-search-form .form-control {
+    padding: 12px 10px;
+    font-size: 14px !important;
+}
+
+.vehicle-search-form .form-control:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.vehicle-search-form .input-group-btn .btn {
+    border: none;
+    background: var(--bs-color-blue-1);
+    color: #fff;
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+.vehicle-search-form .input-group-btn .btn:hover {
+    background: #1a1f5a;
+    transform: translateY(-1px);
+}
+
+.vehicle-search-form .input-group-btn .btn i {
+    font-size: 18px;
+}
+
+.vehicle-search-results {
+    position: relative;
+    margin-top: 5px;
+}
+
+.vehicle-search-results .dropdown-menu {
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    padding: 0;
+    overflow: hidden;
+}
+
+.vehicle-search-results .dropdown-menu li a {
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #eee;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.vehicle-search-results .dropdown-menu li:last-child a {
+    border-bottom: none;
+}
+
+.vehicle-search-results .dropdown-menu li a:hover {
+    background-color: var(--bs-color-yellow);
+    color: #333;
+    text-decoration: none;
+    padding-left: 25px;
+}
+
+.vehicle-search-results .dropdown-menu li a.vehicle-suggestion {
+    cursor: pointer;
+}
+
+/* Responsivo para mobile */
+@media (max-width: 767px) {
+    .vehicle-search-banner {
+        padding: 20px;
+    }
+    
+    .vehicle-search-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .vehicle-search-title h3 {
+        font-size: 20px;
+    }
+    
+    .vehicle-search-form {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .vehicle-search-form .input-group {
+        width: 100%;
+    }
+    
+    .vehicle-search-form .form-control {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    
+    .vehicle-search-form .input-group-btn .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Responsivo para tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+    .vehicle-search-content {
+        gap: 20px;
+    }
+    
+    .vehicle-search-title h3 {
+        font-size: 22px;
+    }
+    
+    .vehicle-search-form {
+        max-width: 400px;
+        margin: 0 auto;
+        min-width: 400px;
+    }
+}
+</style>

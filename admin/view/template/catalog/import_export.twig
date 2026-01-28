@@ -1,0 +1,32 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>Importar/Exportar Produtos</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Exportar Produtos</h3></div>
+            <div class="panel-body">
+                <a href="{{ export_action }}" class="btn btn-success">Exportar XLSX</a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Importar Produtos</h3></div>
+            <div class="panel-body">
+                <form action="{{ import_action }}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="import_file" class="form-control" required>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Importar XLSX</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{ footer }}

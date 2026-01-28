@@ -1,0 +1,426 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-about" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-about" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-data" data-toggle="tab" style="display:none!important;">{{ tab_data }}</a></li>
+            <li><a href="#tab-testimonials" data-toggle="tab">Depoimentos</a></li>
+            <li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li>
+            <li><a href="#tab-design" data-toggle="tab" style="display:none!important;">{{ tab_design }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+            
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="status" id="input-status" class="form-control">
+                    {% if status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              
+                <ul class="nav nav-tabs" id="language">
+                 {% for language in languages %}
+                 <li{% if loop.first %} class="active"{% endif %}><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                 {% endfor %}
+               </ul>
+              <div class="tab-content">
+                {% for language in languages %}
+                 <div class="tab-pane{% if loop.first %} active{% endif %}" id="language{{ language.language_id }}">
+                  <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="about_description[{{ language.language_id }}][title]" value="{{ about_description[language.language_id] ? about_description[language.language_id].title : '' }}" placeholder="{{ entry_title }}" id="input-title{{ language.language_id }}" class="form-control" />
+                      {% if error_title[language.language_id] %}
+                      <div class="text-danger">{{ error_title[language.language_id] }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="input-description{{ language.language_id }}">{{ entry_description }}</label>
+                    <div class="col-sm-10">
+                      <textarea name="about_description[{{ language.language_id }}][description]" placeholder="{{ entry_description }}" id="input-description{{ language.language_id }}" data-toggle="summernote" class="form-control">{{ about_description[language.language_id] ? about_description[language.language_id].description : '' }}</textarea>
+                      {% if error_description[language.language_id] %}
+                      <div class="text-danger">{{ error_description[language.language_id] }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="input-meta-title{{ language.language_id }}">{{ entry_meta_title }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="about_description[{{ language.language_id }}][meta_title]" value="{{ about_description[language.language_id] ? about_description[language.language_id].meta_title : '' }}" placeholder="{{ entry_meta_title }}" id="input-meta-title{{ language.language_id }}" class="form-control" />
+                      {% if error_meta_title[language.language_id] %}
+                      <div class="text-danger">{{ error_meta_title[language.language_id] }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-meta-description{{ language.language_id }}">{{ entry_meta_description }}</label>
+                    <div class="col-sm-10">
+                      <textarea name="about_description[{{ language.language_id }}][meta_description]" rows="5" placeholder="{{ entry_meta_description }}" id="input-meta-description{{ language.language_id }}" class="form-control">{{ about_description[language.language_id] ? about_description[language.language_id].meta_description : '' }}</textarea>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-meta-keyword{{ language.language_id }}">{{ entry_meta_keyword }}</label>
+                    <div class="col-sm-10">
+                      <textarea name="about_description[{{ language.language_id }}][meta_keyword]" rows="5" placeholder="{{ entry_meta_keyword }}" id="input-meta-keyword{{ language.language_id }}" class="form-control">{{ about_description[language.language_id] ? about_description[language.language_id].meta_keyword : '' }}</textarea>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-data">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="sort_order" value="{{ sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-store">{{ entry_store }}</label>
+                <div class="col-sm-10">
+                  <div class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% for store in stores %}
+                    <div class="checkbox">
+                      <label>
+                        {% if store.store_id in about_store %}
+                        <input type="checkbox" name="about_store[]" value="{{ store.store_id }}" checked="checked" />
+                        {{ store.name }}
+                        {% else %}
+                        <input type="checkbox" name="about_store[]" value="{{ store.store_id }}" />
+                        {{ store.name }}
+                        {% endif %}
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-testimonials">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Depoimentos de Clientes</label>
+                <div class="col-sm-10">
+                  <div class="table-responsive">
+                    <table id="testimonials" class="table table-striped table-bordered table-hover">
+                                             <thead>
+                         <tr>
+                           <td>Nome do Cliente</td>
+                           <td>Cidade</td>
+                           <td>Mensagem</td>
+                           <td>Imagem</td>
+                           <td>URL do Vídeo</td>
+                           <td>Ordem</td>
+                           <td></td>
+                         </tr>
+                       </thead>
+                      <tbody>
+                        {% set testimonial_row = 0 %}
+                        {% if testimonials %}
+                        {% for testimonial in testimonials %}
+                        <tr id="testimonial-row{{ testimonial_row }}">
+                          <td class="text-left">
+                            <input type="text" name="testimonials[{{ testimonial_row }}][customer_name]" value="{{ testimonial.customer_name }}" placeholder="Nome do Cliente" class="form-control" />
+                          </td>
+                                                     <td class="text-left">
+                             <input type="text" name="testimonials[{{ testimonial_row }}][city]" value="{{ testimonial.city }}" placeholder="Cidade (opcional)" class="form-control" />
+                           </td>
+                           <td class="text-left">
+                             <textarea name="testimonials[{{ testimonial_row }}][message]" placeholder="Mensagem do cliente (opcional)" class="form-control" rows="3">{{ testimonial.message }}</textarea>
+                           </td>
+                           <td class="text-left">
+                             <div class="input-group">
+                               <input type="text" name="testimonials[{{ testimonial_row }}][image]" value="{{ testimonial.image }}" placeholder="Imagem" id="input-image{{ testimonial_row }}" class="form-control" />
+                               <span class="input-group-btn">
+                                 <button type="button" id="button-image{{ testimonial_row }}" class="btn btn-primary"><i class="fa fa-upload"></i></button>
+                               </span>
+                             </div>
+                           </td>
+                          <td class="text-left">
+                            <input type="text" name="testimonials[{{ testimonial_row }}][video_url]" value="{{ testimonial.video_url }}" placeholder="URL do Vídeo YouTube" class="form-control" />
+                          </td>
+                          <td class="text-left">
+                            <input type="text" name="testimonials[{{ testimonial_row }}][sort_order]" value="{{ testimonial.sort_order }}" placeholder="Ordem" class="form-control" />
+                          </td>
+                          <td class="text-left">
+                            <button type="button" onclick="$('#testimonial-row{{ testimonial_row }}').remove();" data-toggle="tooltip" title="Remover" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                          </td>
+                        </tr>
+                        {% set testimonial_row = testimonial_row + 1 %}
+                        {% endfor %}
+                        {% endif %}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="5"></td>
+                          <td class="text-left">
+                            <button type="button" onclick="addTestimonial();" data-toggle="tooltip" title="Adicionar Depoimento" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-seo">
+              <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ entry_keyword }}</div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                                     <thead>
+                     <tr>
+                       <td class="text-left">Lojas</td>
+                       <td class="text-left">Idiomas</td>
+                       <td class="text-left">URL Amigável</td>
+                     </tr>
+                   </thead>
+                                       <tbody>
+                       {% for store in stores %}
+                       {% for language in languages %}
+                       <tr>
+                         <td class="text-left">{{ store.name }}</td>
+                         <td class="text-left">{{ language.name }}</td>
+                         <td class="text-left">
+                           {% if about_seo_url[store.store_id] and about_seo_url[store.store_id][language.language_id] %}
+                           <input type="text" name="about_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{{ about_seo_url[store.store_id][language.language_id] }}" placeholder="{{ entry_keyword }}" class="form-control" />
+                           {% else %}
+                           <input type="text" name="about_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="" placeholder="{{ entry_keyword }}" class="form-control" />
+                           {% endif %}
+                         </td>
+                       </tr>
+                       {% endfor %}
+                       {% endfor %}
+                     </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-design">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_store }}</td>
+                      <td class="text-left">{{ entry_layout }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for store in stores %}
+                    <tr>
+                      <td class="text-left">{{ store.name }}</td>
+                      <td class="text-left">
+                        <select name="about_layout[{{ store.store_id }}]" class="form-control">
+                          <option value=""></option>
+                          {% for layout in layouts %}
+                          {% if about_layout[store.store_id] and about_layout[store.store_id] == layout.layout_id %}
+                          <option value="{{ layout.layout_id }}" selected="selected">{{ layout.name }}</option>
+                          {% else %}
+                          <option value="{{ layout.layout_id }}">{{ layout.name }}</option>
+                          {% endif %}
+                          {% endfor %}
+                        </select>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+// Script para gerar SEO URLs automaticamente baseadas no título
+{% for language in languages %}
+$('input[name="about_description[{{ language.language_id }}][title]"]').on('input', function() {
+    var title = $(this).val();
+    var slug = title.toLowerCase()
+        .normalize('NFD') // Normaliza caracteres acentuados
+        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+        .replace(/[^\w\s-]/g, '') // Remove caracteres especiais
+        .replace(/[\s_-]+/g, '-') // Substitui espaços e underscores por hífens
+        .replace(/^-+|-+$/g, ''); // Remove hífens no início e fim
+    
+    // Atualizar todos os campos de SEO URL para este idioma em todas as lojas
+    {% for store in stores %}
+    $('input[name="about_seo_url[{{ store.store_id }}][{{ language.language_id }}]"]').val(slug);
+    {% endfor %}
+    
+    // Adicionar classe visual para indicar que foi gerado automaticamente
+    {% for store in stores %}
+    $('input[name="about_seo_url[{{ store.store_id }}][{{ language.language_id }}]"]').addClass('auto-generated');
+    {% endfor %}
+});
+
+// Permitir edição manual das SEO URLs (remover classe auto-generated)
+{% for store in stores %}
+{% for language in languages %}
+$('input[name="about_seo_url[{{ store.store_id }}][{{ language.language_id }}]"]').on('input', function() {
+    $(this).removeClass('auto-generated');
+});
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+var testimonial_row = {{ testimonials ? testimonials|length : 0 }};
+
+function addTestimonial() {
+    html  = '<tr id="testimonial-row' + testimonial_row + '">';
+    html += '  <td class="text-left">';
+    html += '    <input type="text" name="testimonials[' + testimonial_row + '][customer_name]" value="" placeholder="Nome do Cliente" class="form-control" />';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <input type="text" name="testimonials[' + testimonial_row + '][city]" value="" placeholder="Cidade (opcional)" class="form-control" />';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <textarea name="testimonials[' + testimonial_row + '][message]" placeholder="Mensagem do cliente (opcional)" class="form-control" rows="3"></textarea>';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <div class="input-group">';
+    html += '      <input type="text" name="testimonials[' + testimonial_row + '][image]" value="" placeholder="Imagem" id="input-image' + testimonial_row + '" class="form-control" />';
+    html += '      <span class="input-group-btn">';
+    html += '        <button type="button" id="button-image' + testimonial_row + '" class="btn btn-primary"><i class="fa fa-upload"></i></button>';
+    html += '      </span>';
+    html += '    </div>';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <input type="text" name="testimonials[' + testimonial_row + '][video_url]" value="" placeholder="URL do Vídeo YouTube" class="form-control" />';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <input type="text" name="testimonials[' + testimonial_row + '][sort_order]" value="" placeholder="Ordem" class="form-control" />';
+    html += '  </td>';
+    html += '  <td class="text-left">';
+    html += '    <button type="button" onclick="$(\'#testimonial-row' + testimonial_row + '\').remove();" data-toggle="tooltip" title="Remover" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+    html += '  </td>';
+    html += '</tr>';
+
+    $('#testimonials tbody').append(html);
+
+    // Adicionar evento para o novo botão de imagem
+    $('#button-image' + testimonial_row).on('click', function() {
+        $('#modal-image').remove();
+        
+        $.ajax({
+            url: 'index.php?route=common/filemanager&user_token={{ user_token }}',
+            dataType: 'html',
+            beforeSend: function() {
+                $('#button-image' + testimonial_row).button('loading');
+            },
+            complete: function() {
+                $('#button-image' + testimonial_row).button('reset');
+            },
+            success: function(html) {
+                $('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+                
+                $('#modal-image').modal('show');
+                
+                $('#modal-image').delegate('a.thumbnail', 'click', function(e) {
+                    e.preventDefault();
+                    
+                    $('#input-image' + testimonial_row).val($(this).parent().find('input').val());
+                    
+                    $('#modal-image').modal('hide');
+                });
+            }
+        });
+    });
+
+    testimonial_row++;
+}
+
+{% for testimonial in testimonials %}
+{% set testimonial_row = loop.index0 %}
+$('#button-image{{ testimonial_row }}').on('click', function() {
+    $('#modal-image').remove();
+    
+    $.ajax({
+        url: 'index.php?route=common/filemanager&user_token={{ user_token }}',
+        dataType: 'html',
+        beforeSend: function() {
+            $('#button-image{{ testimonial_row }}').button('loading');
+        },
+        complete: function() {
+            $('#button-image{{ testimonial_row }}').button('reset');
+        },
+        success: function(html) {
+            $('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+            
+            $('#modal-image').modal('show');
+            
+            $('#modal-image').delegate('a.thumbnail', 'click', function(e) {
+                e.preventDefault();
+                
+                $('#input-image{{ testimonial_row }}').val($(this).parent().find('input').val());
+                
+                $('#modal-image').modal('hide');
+            });
+        }
+    });
+});
+{% endfor %}
+</script>
+
+<style>
+/* Estilo para campos de SEO URL gerados automaticamente */
+.auto-generated {
+    background-color: #f8f9fa !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+}
+
+.auto-generated:focus {
+    background-color: #fff !important;
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Tooltip para indicar que foi gerado automaticamente */
+.auto-generated::after {
+    content: "✓ Gerado automaticamente";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: #28a745;
+    font-weight: bold;
+    pointer-events: none;
+}
+</style>
+
+{{ footer }}

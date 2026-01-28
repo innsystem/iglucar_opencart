@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site em Construção</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f2f2f2 url(./admin/view/image/pattern/bg_admin.png);
+            color: #000;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress {
+            width: 0;
+            height: 100%;
+            background: #FFC222;
+            transition: width 2s ease-in-out;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #FFC222;
+            text-decoration: none;
+        }
+    </style>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '339534312013220');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=339534312013220&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+</head>
+<body>
+    <div class="container">
+        <img src="https://iglucar.com.br/image/catalog/logo_iglucar_preto.png" alt="Iglucar" style="max-width:220px; margin:0 auto 40px; display:block;">
+        <h1>Loja em Manutenção</h1>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="footer" style="font-size:11px;">
+            Desenvolvido por: <a href="https://innsystem.com.br" target="_blank">InnSystem Inovação em Sistemas</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                document.querySelector(".progress").style.width = "50%";
+            }, 500);
+        });
+    </script>
+</body>
+</html>

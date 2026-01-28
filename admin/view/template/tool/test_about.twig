@@ -1,0 +1,83 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>Teste da Página Sobre Nós</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-check-circle"></i> Status da Instalação</h3>
+      </div>
+      <div class="panel-body">
+        <h4>Verificação das Tabelas:</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td><strong>Tabela</strong></td>
+                <td><strong>Status</strong></td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for table, status in tables_status %}
+              <tr>
+                <td>{{ table }}</td>
+                <td>
+                  {% if status == 'OK' %}
+                  <span class="label label-success">{{ status }}</span>
+                  {% else %}
+                  <span class="label label-danger">{{ status }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>Verificação dos Controllers:</h4>
+        <p><strong>Admin:</strong> 
+          {% if controller_status starts with 'OK' %}
+          <span class="label label-success">{{ controller_status }}</span>
+          {% else %}
+          <span class="label label-danger">{{ controller_status }}</span>
+          {% endif %}
+        </p>
+        
+        <h4>Verificação dos Models:</h4>
+        <p><strong>Admin:</strong> 
+          {% if model_status starts with 'OK' %}
+          <span class="label label-success">{{ model_status }}</span>
+          {% else %}
+          <span class="label label-danger">{{ model_status }}</span>
+          {% endif %}
+        </p>
+        
+        <div class="alert alert-info">
+          <i class="fa fa-info-circle"></i> 
+          <strong>Instruções:</strong>
+          <ul style="margin-top: 10px;">
+            <li>Execute o script SQL <code>about_install.sql</code> no seu banco de dados</li>
+            <li>Verifique se todas as tabelas estão com status "OK"</li>
+            <li>Se tudo estiver funcionando, você pode acessar: <strong>Catálogo > Sobre Nós</strong></li>
+            <li>Para testar no frontend, acesse: <code>index.php?route=information/about&about_id=1</code></li>
+          </ul>
+        </div>
+        
+        <div class="alert alert-warning">
+          <i class="fa fa-exclamation-triangle"></i> 
+          <strong>Importante:</strong> Após confirmar que tudo está funcionando, 
+          <strong>DELETE</strong> este arquivo de teste para segurança.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

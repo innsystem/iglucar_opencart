@@ -1,0 +1,1121 @@
+/**
+ * Product Quick Edit - Estilos CSS
+ * Versão: 1.0.0
+ * Compatível com: OpenCart 3.x/4.x
+ */
+
+/* Estilos gerais para os campos editáveis */
+.quick-edit-field {
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.quick-edit-field:hover {
+    background-color: #f9f9f9;
+    border-radius: 3px;
+}
+
+.quick-edit-field.editing {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 3px;
+    padding: 5px;
+    cursor: default;
+}
+
+.quick-edit-field.saving {
+    background-color: #e3f2fd;
+    border: 1px solid #64b5f6;
+}
+
+.quick-edit-field.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    animation: pulse-success 1s ease-in-out;
+}
+
+.quick-edit-field.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    animation: shake 0.5s ease-in-out;
+}
+
+.quick-edit-field.invalid {
+    border: 1px solid #dc3545;
+}
+
+/* Ícone de edição */
+.quick-edit-icon {
+    opacity: 0;
+    margin-left: 5px;
+    color: #6c757d;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.quick-edit-field:hover .quick-edit-icon {
+    opacity: 1;
+}
+
+.quick-edit-field.editing .quick-edit-icon {
+    display: none;
+}
+
+.quick-edit-icon:hover {
+    color: #007bff;
+}
+
+/* Input de edição */
+.quick-edit-input {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+.quick-edit-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Controles de salvamento/cancelamento */
+.quick-edit-controls {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.quick-edit-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.quick-edit-btn.save {
+    background-color: #28a745;
+    color: white;
+}
+
+.quick-edit-btn.save:hover {
+    background-color: #218838;
+}
+
+.quick-edit-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.quick-edit-btn.cancel:hover {
+    background-color: #5a6268;
+}
+
+/* Loading spinner */
+.quick-edit-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 5px;
+}
+
+/* Imagens editáveis */
+.quick-edit-image {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-edit-image:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.quick-edit-image.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Botões de status */
+.quick-edit-status {
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.quick-edit-status.loading {
+    position: relative;
+    color: transparent;
+}
+
+.quick-edit-status.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border: 1px solid #fff;
+    border-top: 1px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Mensagens de validação */
+.quick-edit-validation-message {
+    font-size: 11px;
+    color: #dc3545;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* Mensagens do sistema */
+#quick-edit-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+.quick-edit-message {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    position: relative;
+    padding-right: 35px;
+}
+
+.quick-edit-message.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.quick-edit-message.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.quick-edit-message.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.quick-edit-message.info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Animações */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-success {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px);
+    }
+
+    75% {
+        transform: translateX(2px);
+    }
+}
+
+/* Melhorias responsivas */
+@media (max-width: 768px) {
+    .quick-edit-controls {
+        flex-direction: column;
+    }
+
+    #quick-edit-messages {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+
+/* Ajustes para labels de quantidade */
+.quick-edit-field .field-value .label {
+    display: inline-block;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Melhorar visibilidade do ícone de edição em quantidade */
+.quick-edit-field .field-value:has(.label)+.quick-edit-icon {
+    margin-left: 8px;
+}
+
+/* Modo de edição ativo */
+body.editing-mode {
+    overflow-x: hidden;
+}
+
+/* Estilo específico para campos de preço */
+.quick-edit-field[data-field="price"] .quick-edit-input {
+    text-align: right;
+}
+
+/* Estilo específico para campos de quantidade */
+.quick-edit-field[data-field="quantity"] .quick-edit-input {
+    text-align: center;
+    max-width: 80px;
+}
+
+/* Tooltip customizado para quick edit */
+.quick-edit-field[data-toggle="tooltip"] {
+    position: relative;
+}
+
+/* Ajuste para não quebrar layout em tabelas */
+/* .table .quick-edit-field {
+    white-space: nowrap;
+} */
+
+.table .quick-edit-field.editing {
+    white-space: normal;
+    min-width: 100%;
+}
+
+/* Estilo específico para campos de nome */
+.quick-edit-field[data-field="name"] .quick-edit-input {
+    min-width: 150px;
+    white-space: normal;
+}
+
+/* Estilo específico para o TEXTAREA do campo nome */
+.quick-edit-field[data-field="name"] textarea.quick-edit-input {
+    min-height: 60px;
+    /* Altura mínima para o textarea */
+    resize: vertical;
+    /* Permitir redimensionamento apenas vertical */
+    overflow: auto;
+    /* Adicionar scrollbar se o conteúdo exceder a altura */
+    padding: 5px;
+    /* Ajustar padding */
+}
+
+/* ===== PRODUTO QUICK EDIT STYLES ===== */
+
+/* Ícones de edição */
+.quick-edit-icon {
+    color: #999;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.quick-edit-field:hover .quick-edit-icon {
+    opacity: 1;
+}
+
+.quick-edit-icon:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+/* Campos editáveis */
+.quick-edit-field {
+    position: relative;
+    display: inline-block;
+    /* min-width: 100px; */
+    padding: 2px 20px 2px 2px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.quick-edit-field.editable {
+    cursor: pointer;
+    border: 1px transparent solid;
+}
+
+.quick-edit-field.editable:hover {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+/* Estados de edição */
+.quick-edit-field.editing {
+    background-color: #e3f2fd;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.quick-edit-field.saving {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+    position: relative;
+}
+
+.quick-edit-field.success {
+    background-color: #d4edda;
+    border-color: #28a745;
+    animation: successPulse 1s ease-out;
+}
+
+.quick-edit-field.error {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    animation: errorShake 0.5s ease-out;
+}
+
+/* Animações */
+@keyframes successPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes errorShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px);
+    }
+
+    75% {
+        transform: translateX(2px);
+    }
+}
+
+/* Input de edição inline */
+.quick-edit-input {
+    border: none;
+    background: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    width: 100%;
+    outline: none;
+    padding: 2px 4px;
+    margin: -2px -4px;
+}
+
+.quick-edit-input:focus {
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 3px;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Botões de controle */
+.quick-edit-controls {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 5px;
+    z-index: 1000;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.quick-edit-btn {
+    font-size: 11px;
+    padding: 2px 8px;
+    margin: 0 2px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-edit-btn.save {
+    background-color: #28a745;
+    color: white;
+}
+
+.quick-edit-btn.save:hover {
+    background-color: #218838;
+}
+
+.quick-edit-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.quick-edit-btn.cancel:hover {
+    background-color: #5a6268;
+}
+
+/* Loading spinner */
+.quick-edit-loading {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 5px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Imagem editável */
+.quick-edit-image {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.quick-edit-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.quick-edit-image::after {
+    content: '\f030';
+    font-family: 'FontAwesome';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.quick-edit-image:hover::after {
+    opacity: 1;
+}
+
+/* Status toggle */
+.quick-edit-status {
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-edit-status:hover {
+    transform: scale(1.05);
+}
+
+.quick-edit-status.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Mensagens de feedback */
+.quick-edit-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.quick-edit-message.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.quick-edit-message.success {
+    background-color: #28a745;
+}
+
+.quick-edit-message.error {
+    background-color: #dc3545;
+}
+
+.quick-edit-message.info {
+    background-color: #007bff;
+}
+
+/* Validação em tempo real */
+.quick-edit-field.invalid {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.quick-edit-validation-message {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #dc3545;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    white-space: nowrap;
+    margin-top: 2px;
+    z-index: 1000;
+}
+
+.quick-edit-validation-message::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 10px;
+    border: 4px solid transparent;
+    border-bottom-color: #dc3545;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .quick-edit-field {
+        min-width: 80px;
+    }
+
+    .quick-edit-controls {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .quick-edit-icon {
+        opacity: 1;
+        font-size: 14px;
+    }
+
+    .quick-edit-message {
+        left: 20px;
+        right: 20px;
+        text-align: center;
+    }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .quick-edit-icon {
+        opacity: 1;
+    }
+
+    .quick-edit-field:hover {
+        background-color: transparent;
+    }
+
+    .quick-edit-field.editable {
+        border-color: #dee2e6;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .quick-edit-field.editing {
+        border-width: 2px;
+    }
+
+    .quick-edit-field.success {
+        border-width: 2px;
+    }
+
+    .quick-edit-field.error {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .quick-edit-field,
+    .quick-edit-icon,
+    .quick-edit-image,
+    .quick-edit-status,
+    .quick-edit-message {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Print styles */
+@media print {
+
+    .quick-edit-icon,
+    .quick-edit-controls,
+    .quick-edit-message {
+        display: none !important;
+    }
+}
+
+/* Accessibility focus indicators */
+.quick-edit-field:focus-visible,
+.quick-edit-btn:focus-visible,
+.quick-edit-image:focus-visible,
+.quick-edit-status:focus-visible {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .quick-edit-field:hover {
+        background-color: #2d3748;
+    }
+
+    .quick-edit-field.editing {
+        background-color: #1a365d;
+    }
+
+    .quick-edit-controls {
+        background: #2d3748;
+        border-color: #4a5568;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .quick-edit-input:focus {
+        background-color: #2d3748;
+        color: #fff;
+    }
+}
+
+/* Performance optimizations */
+.quick-edit-field,
+.quick-edit-icon {
+    will-change: transform, opacity;
+}
+
+.quick-edit-loading {
+    will-change: transform;
+}
+
+/* Smooth scrolling when editing */
+.editing-mode {
+    scroll-behavior: smooth;
+}
+
+/* Table specific styles */
+.table .quick-edit-field {
+    display: block;
+    width: 100%;
+}
+
+.table td.text-center .quick-edit-field {
+    display: inline-block;
+    width: auto;
+}
+
+/* Prevent text selection during editing */
+.quick-edit-field.editing {
+    user-select: none;
+}
+
+.quick-edit-input {
+    user-select: text;
+}
+
+/* ===== SWITCH TOGGLE PARA STATUS ===== */
+.status-switch {
+    position: relative;
+    display: inline-block;
+}
+
+.status-switch input[type="checkbox"] {
+    display: none;
+}
+
+.switch-label {
+    display: block;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0;
+}
+
+.switch-label:hover {
+    background-color: #b3b3b3;
+}
+
+.switch-slider {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Switch ativo (checked) */
+.status-switch input[type="checkbox"]:checked + .switch-label {
+    background-color: #28a745;
+}
+
+.status-switch input[type="checkbox"]:checked + .switch-label:hover {
+    background-color: #218838;
+}
+
+.status-switch input[type="checkbox"]:checked + .switch-label .switch-slider {
+    transform: translateX(26px);
+}
+
+/* Efeito focus para acessibilidade */
+.status-switch input[type="checkbox"]:focus + .switch-label {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Loading state para o switch */
+.status-switch.loading .switch-label {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.status-switch.loading .switch-slider {
+    animation: switchLoading 1s linear infinite;
+}
+
+@keyframes switchLoading {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Tamanho menor para tabelas */
+.table .status-switch .switch-label {
+    width: 38px;
+    height: 16px;
+    border-radius: 10px;
+}
+
+.table .status-switch .switch-slider {
+    height: 10px;
+    width: 10px;
+    left: 3px;
+    top: 3px;
+}
+
+.table .status-switch input[type="checkbox"]:checked + .switch-label .switch-slider {
+    transform: translateX(20px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .status-switch .switch-label {
+        width: 36px;
+        height: 18px;
+        border-radius: 9px;
+    }
+    
+    .status-switch .switch-slider {
+        height: 12px;
+        width: 12px;
+        left: 3px;
+        top: 3px;
+    }
+    
+    .status-switch input[type="checkbox"]:checked + .switch-label .switch-slider {
+        transform: translateX(18px);
+    }
+}
+
+/* Estilos para Quick Edit de Produtos */
+.quick-edit-field {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.quick-edit-field.editable:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.quick-edit-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: #337ab7;
+    cursor: pointer;
+}
+
+.quick-edit-field.editable:hover .quick-edit-icon {
+    opacity: 1;
+}
+
+.quick-edit-input {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.quick-edit-image {
+    position: relative;
+    cursor: pointer;
+}
+
+.quick-edit-image:hover {
+    opacity: 0.8;
+}
+
+.status-switch {
+    position: relative;
+    display: inline-block;
+}
+
+.status-switch input[type="checkbox"] {
+    display: none;
+}
+
+.switch-label {
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.switch-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.status-switch input[type="checkbox"]:checked + .switch-label {
+    background-color: #5cb85c;
+}
+
+.status-switch input[type="checkbox"]:checked + .switch-label .switch-slider {
+    transform: translateX(20px);
+}
+
+.status-switch.loading .switch-label {
+    opacity: 0.6;
+}
+
+.status-switch.success .switch-label {
+    box-shadow: 0 0 5px #5cb85c;
+}
+
+/* Estilos para Atualização de Imagens */
+.update-image-btn {
+    margin-top: 3px;
+    padding: 2px 8px;
+    font-size: 10px;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.update-image-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#updateImageModal .modal-dialog {
+    margin: 20px auto;
+}
+
+#updateImageModal .modal-body {
+    padding: 20px;
+}
+
+#googleImagesFrame {
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#imageUrlInput {
+    font-family: monospace;
+    font-size: 12px;
+    resize: vertical;
+    min-height: 60px;
+}
+
+#downloadImageBtn {
+    background: linear-gradient(45deg, #28a745, #34ce57);
+    border: none;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+#downloadImageBtn:hover {
+    background: linear-gradient(45deg, #218838, #28a745);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#downloadImageBtn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#imageUpdateProgress .progress {
+    margin-bottom: 0;
+    height: 20px;
+}
+
+#imageUpdateProgress .progress-bar {
+    background: linear-gradient(45deg, #17a2b8, #20c997);
+    animation: progress-animation 1.5s infinite;
+}
+
+@keyframes progress-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#imageUpdateResult .alert {
+    margin-bottom: 0;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+#imageUpdateResult .alert-success {
+    background: linear-gradient(45deg, #d4edda, #c3e6cb);
+    border-color: #b8daff;
+    color: #155724;
+}
+
+#imageUpdateResult .alert-danger {
+    background: linear-gradient(45deg, #f8d7da, #f5c6cb);
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.update-image-btn {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #updateImageModal .modal-dialog {
+        width: 95%;
+        margin: 10px auto;
+    }
+    
+    #updateImageModal .col-md-8,
+    #updateImageModal .col-md-4 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    #googleImagesFrame {
+        height: 250px;
+    }
+}

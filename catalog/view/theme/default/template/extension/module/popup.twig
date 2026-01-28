@@ -1,0 +1,134 @@
+{% if image_url and title %}
+<!-- Popup Modal -->
+<div id="{{ popup_id }}" class="modal fade popup-module" tabindex="-1" role="dialog" aria-labelledby="{{ popup_id }}-label" style="display: none;">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: {{ width }}px;">
+    <div class="modal-content" style="border: none; border-radius: 10px; overflow: hidden;">
+      <div class="modal-header" style="border-bottom: none; padding: 0px !important;">
+        <button type="button" class="close popup-close" data-dismiss="modal" aria-label="Close" style="font-size: 28px; opacity: 0.8;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 0 !important; text-align: center;">
+        {% if link %}
+        <a href="{{ link }}" target="_blank" style="display: block;">
+          <img src="{{ image_url }}" alt="{{ title }}" class="img-responsive popup-image" style="width: 100%; height: auto; max-height: {{ height }}px; object-fit: contain; border-radius: 5px;" />
+        </a>
+        {% else %}
+        <img src="{{ image_url }}" alt="{{ title }}" class="img-responsive popup-image" style="width: 100%; height: auto; max-height: {{ height }}px; object-fit: contain; border-radius: 5px;" />
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.popup-module .modal-content {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: white;
+}
+
+.popup-module .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1051;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-module .close:hover {
+  background: rgba(255, 255, 255, 1);
+  opacity: 1;
+}
+
+.popup-module .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  var popupId = '{{ popup_id }}';
+  var delay = {{ delay }};
+  var repeatTime = '{{ repeat_time }}';
+  var cookieName = 'popup_' + popupId.replace(/[^a-zA-Z0-9]/g, '_');
+  
+  // Função para definir cookie
+  function setCookie(name, value, hours) {
+    var expires = "";
+    if (hours) {
+      var date = new Date();
+      date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  }
+  
+  // Função para obter cookie
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+  
+  // Verificar se o popup deve ser exibido
+  function shouldShowPopup() {
+    if (repeatTime === 'disabled') {
+      // Se desabilitado, verifica apenas se já foi exibido na sessão
+      return !sessionStorage.getItem(cookieName);
+    } else {
+      // Verifica cookie com tempo de expiração
+      return !getCookie(cookieName);
+    }
+  }
+  
+  // Função para exibir o popup
+  function showPopup() {
+    if (shouldShowPopup()) {
+      setTimeout(function() {
+        $('#' + popupId).modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+        
+        // Marcar como exibido
+        if (repeatTime === 'disabled') {
+          sessionStorage.setItem(cookieName, 'shown');
+        } else {
+          var hours = parseInt(repeatTime);
+          if (!isNaN(hours)) {
+            setCookie(cookieName, 'shown', hours);
+          }
+        }
+      }, delay);
+    }
+  }
+  
+  // Event listener para fechar o popup
+  $('#' + popupId).on('hidden.bs.modal', function () {
+    // Popup foi fechado
+  });
+  
+  // Event listener para o botão de fechar
+  $('#' + popupId + ' .popup-close').on('click', function() {
+    $('#' + popupId).modal('hide');
+  });
+  
+  // Inicializar o popup
+  showPopup();
+});
+</script>
+{% endif %}
+

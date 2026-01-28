@@ -1,0 +1,165 @@
+</main>
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="logo mb-3">
+					<img src="{{ logo }}" alt="{{ site_name }}" class="img-responsive">
+				</div>
+				<p>{{site_description}}</p>
+			</div>
+			<div class="col-sm-3">
+				<h5>{{ text_insticuional }}</h5>
+				<ul class="list-unstyled">
+					{% for information in informations %}
+						<li>
+							<a href="{{ information.href }}">{{ information.title }}</a>
+						</li>
+					{% endfor %}
+					<li>
+						<a href="{{ contact }}">{{ text_contact }}</a>
+					</li>
+					<li>
+						<a href="{{ sitemap }}">{{ text_sitemap }}</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-sm-3">
+				<h5>{{ text_account }}</h5>
+				<ul class="list-unstyled">
+					<li>
+						<a href="{{ account }}">{{ text_account }}</a>
+					</li>
+					<li>
+						<a href="{{ order }}">{{ text_order }}</a>
+					</li>
+					<li>
+						<a href="{{ return }}">{{ text_return }}</a>
+					</li>
+					<li>
+						<a href="{{ wishlist }}">{{ text_wishlist }}</a>
+					</li>
+					<li>
+						<a href="{{ newsletter }}">{{ text_newsletter }}</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-sm-3">
+				<h5>{{ text_contact }}</h5>
+				<ul class="list-unstyled list-contact">
+					<li>
+						<i class="fa fa-whatsapp"></i>
+						<span>WhatsApp: {{ telephone }}</span>
+					</li>
+					{% if telephone2 %}
+					<li>
+						<i class="fa fa-whatsapp"></i>
+						<span>WhatsApp: {{ telephone2 }}</span>
+					</li>
+					{% endif %}
+					{% if telephone3 %}
+					<li>
+						<i class="fa fa-whatsapp"></i>
+						<span>WhatsApp: {{ telephone3 }}</span>
+					</li>
+					{% endif %}
+					<li>
+						<i class="fa fa-envelope"></i>
+						<span>{{ email }}</span>
+					</li>
+					{% if hour_open %}
+					<li>
+						<i class="fa fa-clock-o"></i>
+						<span>{{ hour_open}}</span>
+					</li>
+					{% endif %}
+					{% if facebook%}
+					<li>
+						<a href="{{ facebook }}" target="_blank">
+							<i class="fa fa-facebook"></i>
+							<span>Facebook</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if instagram %}
+					<li>
+						<a href="{{ instagram }}" target="_blank">
+							<i class="fa fa-instagram"></i>
+							<span>Instagram</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if youtube %}
+					<li>
+						<a href="{{ youtube }}" target="_blank">
+							<i class="fa fa-youtube"></i>
+							<span>Youtube</span>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+
+		<hr>
+		
+		<div class="row">
+			<div class="col-sm-10">
+				<p>{{ powered }}
+					<br>
+					{{ address }}</p>
+			</div>
+			<div class="col-sm-2">
+				<a href="https://innsystem.com.br" target="_blank" class="text-right">
+					<img src="./admin/view/image/logo_white.png" alt="InnSystem Inovação em Sistemas" class="img-responsive" style="max-width:120px;">
+				</a>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<div class="whatsapp_futuante pulsaDelay animate__animated animate__tada">
+	<a href="https://wa.me/55{{ telephone|replace({'(': "", ")" : "", " ": "", "-": "", "." : ""}) }}" target="_Blank"><i class="fa fa-whatsapp"></i></a>
+</div>
+
+{% for style in styles %}
+	<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}"/>
+{% endfor %}
+{% for script in scripts %}
+	<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+{# Cart Dropdown Lateral #}
+<script>
+	$(document).on('click', '.button-cart-open', function (e) {
+e.preventDefault();
+$('#cart').toggleClass('open');
+});
+</script>
+{# Mega Menu Scripts #}
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+var categories = document.querySelectorAll(".mega-menu-category");
+var submenus = document.querySelectorAll(".mega-menu-sub");
+
+categories.forEach(function (category) {
+category.addEventListener("mouseenter", function () {
+var targetId = this.getAttribute("data-target");
+
+// Esconde todos os submenus
+submenus.forEach(function (submenu) {
+submenu.style.display = "none";
+});
+
+// Exibe o submenu correspondente
+var targetSubmenu = document.getElementById(targetId);
+if (targetSubmenu) {
+targetSubmenu.style.display = "block";
+}
+});
+});
+});
+
+</script>
+</body></html>

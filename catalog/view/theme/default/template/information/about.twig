@@ -1,0 +1,439 @@
+{{ header }}
+<div id="information-about" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">
+    <div id="content" class="{{ class }}">
+      <h1>{{ heading_title }}</h1>
+      
+      <div class="about-content">
+        {{ description }}
+      </div>
+
+      {% if testimonials %}
+      <div class="testimonials-section">
+        <h2>Depoimentos de Nossos Clientes</h2>
+        <div class="testimonials-grid">
+          {% for testimonial in testimonials %}
+          <div class="testimonial-item">
+            <div class="testimonial-card">
+             
+              <div class="testimonial-content">
+                <h4 class="customer-name">{{ testimonial.customer_name }}</h4>
+                {% if testimonial.city %}
+                <p class="customer-city">{{ testimonial.city }}</p>
+                {% endif %}
+                
+                {% if testimonial.message %}
+                <div class="testimonial-message">
+                  <p>{{ testimonial.message }}</p>
+                </div>
+                {% endif %}
+
+                {% if testimonial.image %}
+                <div class="testimonial-image">
+                  {% if testimonial.video_url %}
+                  <a href="#" class="video-trigger" 
+                     data-video-url="{{ testimonial.video_url }}" 
+                     data-customer-name="{{ testimonial.customer_name }}" 
+                     data-toggle="modal" 
+                     data-target="#videoModal">
+                    <img src="{{ testimonial.image }}" alt="{{ testimonial.customer_name }}" class="img-responsive" />
+                    <div class="video-overlay">
+                      <div class="play-button">
+                        <i class="fa fa-play"></i>
+                      </div>
+                      <span class="play-text">Clique para assistir</span>
+                    </div>
+                  </a>
+                  {% else %}
+                  <img src="{{ testimonial.image }}" alt="{{ testimonial.customer_name }}" class="img-responsive" />
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+      <div class="buttons clearfix">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+    </div>
+    {{ column_left }}
+    {{ column_right }}
+  </div>
+  {{ content_top }}
+  {{ content_bottom }}
+</div>
+
+<!-- Modal para exibir o vídeo -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="videoModalLabel">Depoimento em Vídeo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe id="videoIframe" class="embed-responsive-item" 
+                  title="Vídeo de depoimento" 
+                  frameborder="0" 
+                  referrerpolicy="strict-origin-when-cross-origin" 
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.about-content {
+    margin-bottom: 30px;
+    font-size:14px;
+    line-height: 1.6;
+}
+
+.testimonials-section {
+    margin-top: 40px;
+}
+
+.testimonials-section h2 {
+    text-align: start;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+}
+
+/* Layout Masonry com CSS Grid */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    align-items: start;
+    grid-auto-rows: 1fr;
+}
+
+.testimonial-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.testimonial-image {
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
+
+.testimonial-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-image img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+}
+
+.testimonial-image:hover .video-overlay {
+    opacity: 1;
+}
+
+.play-button {
+    width: 60px;
+    height: 60px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+    background: #0056b3;
+}
+
+.play-button i {
+    color: white;
+    font-size: 24px;
+    margin-left: 3px;
+}
+
+.play-text {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.testimonial-content {
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-name {
+    color: #007bff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.customer-city {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.testimonial-message {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+    flex-grow: 1;
+}
+
+.testimonial-message p {
+    margin: 0;
+    font-style: italic;
+    color: #555;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.buttons {
+    margin-top: 30px;
+}
+
+/* Estilos da modal */
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-header {
+    background:#f3e542;
+    color: #000;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+}
+
+.modal-title {
+    flex-grow: 1;
+}
+
+.modal-header .close {
+    color: #000;
+    opacity: 0.8;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+}
+
+/* Responsividade para diferentes tamanhos de tela */
+@media (max-width: 1200px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .testimonials-section {
+        padding: 20px 15px;
+    }
+    
+    .testimonial-card {
+        padding: 15px;
+    }
+    
+    .play-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .play-button i {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .testimonial-card {
+        padding: 15px;
+    }
+    
+    .play-button {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .play-button i {
+        font-size: 18px;
+    }
+    
+    .play-text {
+        font-size: 12px;
+    }
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    // Função para converter URLs do YouTube para formato embed
+    function convertToEmbedUrl(url) {
+        let embedUrl = url;
+        
+        if (url.includes('youtube.com/watch?v=')) {
+            embedUrl = url.replace('watch?v=', 'embed/');
+        } else if (url.includes('youtu.be/')) {
+            const videoId = url.split('/').pop();
+            embedUrl = 'https://www.youtube.com/embed/' + videoId;
+        } else if (url.includes('youtube.com/embed/')) {
+            embedUrl = url;
+        }
+        
+        return embedUrl;
+    }
+    
+    // Função para otimizar o layout masonry
+    function optimizeMasonryLayout() {
+        const grid = $('.testimonials-grid');
+        const items = $('.testimonial-item');
+        
+        if (items.length === 0) return;
+        
+        // Aguardar um pouco para as imagens carregarem
+        setTimeout(function() {
+            // Reorganizar os itens para melhor distribuição
+            const gridElement = grid[0];
+            const gridStyle = window.getComputedStyle(gridElement);
+            const gap = parseInt(gridStyle.gap);
+            
+            // Calcular altura média dos itens
+            let totalHeight = 0;
+            items.each(function() {
+                totalHeight += $(this).outerHeight(true);
+            });
+            const avgHeight = totalHeight / items.length;
+            
+            // Ajustar grid-auto-rows para melhor distribuição
+            gridElement.style.gridAutoRows = 'minmax(' + (avgHeight * 0.8) + 'px, auto)';
+            
+            // Forçar reflow do grid
+            gridElement.style.display = 'none';
+            gridElement.offsetHeight; // Trigger reflow
+            gridElement.style.display = 'grid';
+        }, 100);
+    }
+    
+    // Evento para abrir a modal e carregar o vídeo
+    $('.video-trigger').on('click', function(e) {
+        e.preventDefault();
+        
+        const videoUrl = $(this).data('video-url');
+        const customerName = $(this).data('customer-name');
+        
+        // Converter URL para formato embed
+        const embedUrl = convertToEmbedUrl(videoUrl);
+        
+        // Atualizar título da modal
+        $('#videoModalLabel').text('Depoimento de ' + customerName);
+        
+        // Carregar o iframe apenas quando a modal for aberta
+        $('#videoIframe').attr('src', embedUrl);
+    });
+    
+    // Evento para limpar o iframe quando a modal for fechada
+    $('#videoModal').on('hidden.bs.modal', function() {
+        $('#videoIframe').attr('src', '');
+    });
+    
+    // Otimizar layout quando a página carregar
+    optimizeMasonryLayout();
+    
+    // Otimizar layout quando a janela for redimensionada
+    let resizeTimer;
+    $(window).on('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            optimizeMasonryLayout();
+        }, 250);
+    });
+    
+    // Otimizar layout quando as imagens carregarem
+    $('.testimonial-image img').on('load', function() {
+        optimizeMasonryLayout();
+    });
+    
+    // Fallback para imagens que já carregaram
+    $('.testimonial-image img').each(function() {
+        if (this.complete) {
+            optimizeMasonryLayout();
+        }
+    });
+});
+</script>
+
+{{ footer }}

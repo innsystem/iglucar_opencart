@@ -1,0 +1,42 @@
+<div class="swiper-viewport category-carousel">
+	<div class="swiper-categories-icons">
+		<div class="swiper-wrapper">
+			{% for category in categories %}
+				<div class="swiper-slide">
+					<a href="{{ category.href }}">
+						<div class="category-icon">
+							<img src="{{ category.image }}" alt="{{ category.name }}">
+						</div>
+						<p>{{ category.name }}</p>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
+		<!-- Botões de navegação -->
+        <div class="swiper-pager">
+            <div class="swiper-button-prev categories-next-button"></div>
+            <div class="swiper-button-next categories-prev-button"></div>
+        </div>
+	</div>
+</div>
+
+<script>
+$('.swiper-categories-icons').swiper({
+	mode: 'horizontal',
+	slidesPerView: 5,
+	nextButton: '.swiper-categories-icons .categories-next-button',
+    prevButton: '.swiper-categories-icons .categories-prev-button',
+    spaceBetween: 30,
+	breakpoints: {
+        768: {
+            slidesPerView: 5,
+            spaceBetween: 15,
+        },
+        1024: {
+            slidesPerView: 7,
+            spaceBetween: 20,
+        },
+    },
+});
+
+</script>
